@@ -21,19 +21,19 @@ class Utils {
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 1,
       backgroundColor: AppColors.primaryColor,
-      textColor: AppColors.secconderyColor,
+      textColor: AppColors.seconadryColor,
       fontSize: 16.0,
     );
   }
   static toastMassageCenter(String meassage) {
     Fluttertoast.showToast(
-      // webBgColor: [AppColors.primaryColor,AppColors.secconderyColor],
+      // webBgColor: [AppColors.primaryColor,AppColors.seconadryColor],
       msg: meassage,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,
       timeInSecForIosWeb: 1,
       backgroundColor: AppColors.primaryColor,
-      textColor: AppColors.secconderyColor,
+      textColor: AppColors.seconadryColor,
       fontSize: 16.0,
     );
   }
@@ -43,7 +43,7 @@ class Utils {
       title,
       message,
       snackPosition: SnackPosition.TOP,
-      backgroundColor: AppColors.secconderyColor,
+      backgroundColor: AppColors.seconadryColor,
       colorText: AppColors.primaryColor,
       icon:const Icon(
         Icons.warning_amber_rounded,color:AppColors.primaryColor,

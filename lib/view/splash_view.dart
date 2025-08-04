@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_utils/get_utils.dart';
+import 'package:getxmvvm/resources/colors/app_colors.dart';
 import 'package:getxmvvm/viewmodel/services/splash_services.dart';
 
 class SplashView extends StatefulWidget {
@@ -15,17 +15,31 @@ class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
     super.initState();
-    splashServices.isLogin();
+    // splashServices.isLogin();
+    // Navigator.pushReplacement(
+    //   context,
+    //   MaterialPageRoute(builder: (_) => OborandingView()),
+    // );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("title".tr)),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [Center(child: Text("Welcome_Massage".tr))],
+      backgroundColor: AppColors.primaryColor,
+      body: SafeArea(
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          // crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Column(   mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image(image: AssetImage("assets/images/app_bar.png")),
+                Image(image: AssetImage("assets/images/Frame 1171276849.png")),
+              ],
+            ),Spacer(),
+            Image(image: AssetImage("assets/images/image 7.png")),
+          ],
+        ),
       ),
     );
   }

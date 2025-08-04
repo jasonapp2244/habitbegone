@@ -49,7 +49,7 @@ class _InternetExcepetionState extends State<InternetExcepetion> {
               child: Text(
                 "Retry",
                 style: TextStyle(
-                  color: AppColors.secconderyColor,
+                  color: AppColors.seconadryColor,
                   fontWeight: FontWeight.bold,
                 ),
               ),

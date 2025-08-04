@@ -8,14 +8,14 @@ import 'package:getxmvvm/widgets/auth_button.dart';
 import 'package:getxmvvm/widgets/components/social_bitton.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LogiView extends StatefulWidget {
-  const LogiView({super.key});
+class SignUpView extends StatefulWidget {
+  const SignUpView({super.key});
 
   @override
-  State<LogiView> createState() => _LogiViewState();
+  State<SignUpView> createState() => _SignUpViewState();
 }
 
-class _LogiViewState extends State<LogiView> {
+class _SignUpViewState extends State<SignUpView> {
   final ValueNotifier<bool> _obsecurePassword = ValueNotifier<bool>(true);
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -59,7 +59,7 @@ class _LogiViewState extends State<LogiView> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      "Welcome Back!",
+                      "Create New Account",
                       style: GoogleFonts.rethinkSans(
                         color: AppColors.textColorBlack,
                         fontWeight: FontWeight.bold,
@@ -73,7 +73,7 @@ class _LogiViewState extends State<LogiView> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      "Log in to explore about our app",
+                      "Create your account to explore about our app",
                       style: GoogleFonts.rethinkSans(
                         color: AppColors.textColorBlack,
                         fontWeight: FontWeight.normal,
@@ -81,6 +81,50 @@ class _LogiViewState extends State<LogiView> {
                       ),
                     ),
                   ],
+                ),
+                SizedBox(height: Responsive.h(3)),
+                TextFormField(
+                  style: TextStyle(color: AppColors.textColorBlack),
+                  controller: emailController,
+                  focusNode: emailFoucsNode,
+                  cursorColor: AppColors.textColorBlack,
+                  cursorErrorColor: AppColors.seconadryColor,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(Responsive.w(12)),
+                      // borderSide: BorderSide(color: AppColors.borderCardColor),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(Responsive.w(12)),
+                      // borderSide: BorderSide(color: AppColors.borderCardColor),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      // borderSide: BorderSide(color: AppColors.borderCardColor),
+                      borderRadius: BorderRadius.circular(Responsive.w(12)),
+                    ),
+                    prefixIcon: Padding(
+                      padding: EdgeInsets.all(Responsive.w(3)), // 2% of width
+                      child: SvgPicture.asset(
+                        "assets/images/user-multiple-02.svg",
+                      ),
+                    ),
+                    filled: true,
+                    fillColor: AppColors.primaryColor,
+                    hintText: "Full Name",
+                    hintStyle: GoogleFonts.dmSans(
+                      color: AppColors.textColorBlack,
+                      fontWeight: FontWeight.normal,
+                      fontSize: Responsive.sp(12),
+                    ),
+                  ),
+                  onFieldSubmitted: (value) {
+                    Utils.fieldFoucsChnage(
+                      context,
+                      emailFoucsNode,
+                      passwordFoucsNode,
+                    );
+                  },
                 ),
                 SizedBox(height: Responsive.h(3)),
                 TextFormField(
@@ -180,24 +224,10 @@ class _LogiViewState extends State<LogiView> {
                     );
                   },
                 ),
-                SizedBox(height: Responsive.h(1.5)),
-                Padding(
-                  padding: EdgeInsets.only(right: Responsive.w(5)),
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      "Forgot Password?",
-                      style: GoogleFonts.dmSans(
-                        color: AppColors.textColorBlack,
-                        fontWeight: FontWeight.bold,
-                        fontSize: Responsive.sp(10),
-                      ),
-                    ),
-                  ),
-                ),
+
                 SizedBox(height: Responsive.h(2.5)),
                 AuthButton(
-                  buttontext: "Login",
+                  buttontext: "Signup",
                   loading: false,
                   //  authViewmodel.loading,
                   onPress: () {
@@ -268,14 +298,14 @@ class _LogiViewState extends State<LogiView> {
                     Text.rich(
                       textAlign: TextAlign.center,
                       TextSpan(
-                        text: "New here? ",
+                        text: "Already have an Accout? ",
                         style: TextStyle(
                           color: AppColors.filledColor,
                           fontSize: Responsive.sp(12),
                         ),
                         children: [
                           TextSpan(
-                            text: "Create an account",
+                            text: "login",
                             style: TextStyle(
                               color: AppColors.filledtextColor,
                               fontSize: Responsive.sp(12),
@@ -314,17 +344,14 @@ class _LogiViewState extends State<LogiView> {
       height: Responsive.h(6), // 6% of screen height
       width: Responsive.w(25), // 20% of screen width
       decoration: BoxDecoration(
-        
         border: BoxBorder.all(color: AppColors.filledColor),
-        borderRadius: BorderRadius.circular(
-          Responsive.w(5.5),),
-        
+        borderRadius: BorderRadius.circular(Responsive.w(5.5)),
+
         color: AppColors.primaryColor,
       ),
       child: Padding(
         padding: EdgeInsets.all(Responsive.w(3)),
-        child: 
-        SvgPicture.asset(iconPath)
+        child: SvgPicture.asset(iconPath),
         // Image(image: AssetImage(iconPath)),
         // Image( iconPath),
       ),

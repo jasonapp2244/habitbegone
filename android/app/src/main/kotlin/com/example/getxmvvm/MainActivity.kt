@@ -1,4 +1,4 @@
-package com.example.getxmvvm
+package com.example.habit
 
 import io.flutter.embedding.android.FlutterActivity
 

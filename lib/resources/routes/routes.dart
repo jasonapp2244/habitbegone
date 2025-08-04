@@ -13,7 +13,7 @@ class AppRoutes {
       transition: Transition.leftToRight,
     ), GetPage(
       name: RoutesName.loginview,
-      page: () => LoginView(),
+      page: () => LogiView(),
       transitionDuration: const Duration(milliseconds: 500),
       transition: Transition.leftToRight,
     ), GetPage(
