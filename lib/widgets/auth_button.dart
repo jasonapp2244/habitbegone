@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:getxmvvm/resources/colors/app_colors.dart';
+import 'package:habitsbegone/resources/colors/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
@@ -27,7 +27,7 @@ class AuthButton extends StatelessWidget {
           color: AppColors.seconadryColor,
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12.0,horizontal: 12.0),
+          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 12.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

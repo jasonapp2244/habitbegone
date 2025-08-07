@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // For SVG support
-import 'package:getxmvvm/resources/colors/app_colors.dart';
+import 'package:habitsbegone/resources/colors/app_colors.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final int currentIndex;

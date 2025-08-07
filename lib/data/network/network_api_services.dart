@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:getxmvvm/data/app_exception.dart';
-import 'package:getxmvvm/data/network/base_api_services.dart';
+import 'package:habitsbegone/data/app_exception.dart';
+import 'package:habitsbegone/data/network/base_api_services.dart';
 import 'package:http/http.dart' as http;
 
 class NetworkApiServices extends BaseApiServices {
@@ -43,13 +43,17 @@ class NetworkApiServices extends BaseApiServices {
         throw InvalidUrlException("Inavalid URL");
       default:
         throw FetchdataException(
-          "Error While Communicating With Server ${response.statusCode.toString()}" 
+          "Error While Communicating With Server ${response.statusCode.toString()}",
         );
     }
   }
 
   @override
-  Future getPostApiResponse(String url, dynamic data,Map<String,String> header) async {
+  Future getPostApiResponse(
+    String url,
+    dynamic data,
+    Map<String, String> header,
+  ) async {
     if (kDebugMode) {
       print(url);
     }
@@ -57,11 +61,7 @@ class NetworkApiServices extends BaseApiServices {
     dynamic responseJson;
     try {
       final response = await http
-          .post(
-            Uri.parse(url),
-            body: jsonEncode(data),
-            headers:header
-          )
+          .post(Uri.parse(url), body: jsonEncode(data), headers: header)
           .timeout(const Duration(seconds: 10));
       responseJson = retrunResponse(response);
     } on SocketException {

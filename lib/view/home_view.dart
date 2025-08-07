@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:getxmvvm/resources/colors/app_colors.dart';
-import 'package:getxmvvm/utils/responsive.dart';
-import 'package:getxmvvm/widgets/bottom_navigation_bar.dart';
+import 'package:habitsbegone/resources/colors/app_colors.dart';
+import 'package:habitsbegone/utils/responsive.dart';
+import 'package:habitsbegone/widgets/bottom_navigation_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomeView extends StatefulWidget {

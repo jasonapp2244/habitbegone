@@ -1,12 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:getxmvvm/resources/colors/app_colors.dart';
-import 'package:getxmvvm/utils/responsive.dart';
-import 'package:getxmvvm/utils/utils.dart';
-import 'package:getxmvvm/view/home_view.dart';
-import 'package:getxmvvm/widgets/auth_button.dart';
-import 'package:getxmvvm/widgets/components/social_bitton.dart';
+import 'package:habitsbegone/resources/colors/app_colors.dart';
+import 'package:habitsbegone/utils/responsive.dart';
+import 'package:habitsbegone/utils/utils.dart';
+import 'package:habitsbegone/view/home_view.dart';
+import 'package:habitsbegone/view/sign_up_view.dart';
+import 'package:habitsbegone/widgets/auth_button.dart';
+import 'package:habitsbegone/widgets/components/social_bitton.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LogiView extends StatefulWidget {
@@ -216,7 +217,6 @@ class _LogiViewState extends State<LogiView> {
                         context,
                         MaterialPageRoute(builder: (_) => HomeView()),
                       );
-                     
                     }
                   },
                 ),
@@ -277,12 +277,12 @@ class _LogiViewState extends State<LogiView> {
                             recognizer:
                                 TapGestureRecognizer()
                                   ..onTap = () {
-                                    // Navigator.pushReplacement(
-                                    //   context,
-                                    //   // MaterialPageRoute(
-                                    //   //   builder: (_) => Sginupview(),
-                                    //   // ),
-                                    // );
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => SignUpView(),
+                                      ),
+                                    );
                                     // Navigator.pushReplacementNamed(
                                     //   context,
                                     //   RoutesName.signview,

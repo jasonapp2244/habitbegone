@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:getxmvvm/model/login/User_model.dart';
-import 'package:getxmvvm/repository/login_repo.dart';
-import 'package:getxmvvm/resources/routes/routes_name.dart';
-import 'package:getxmvvm/utils/utils.dart';
-import 'package:getxmvvm/viewmodel/controller/login/user_prefrence/users_prefrence.dart';
+import 'package:habitsbegone/model/login/User_model.dart';
+import 'package:habitsbegone/repository/login_repo.dart';
+import 'package:habitsbegone/resources/routes/routes_name.dart';
+import 'package:habitsbegone/utils/utils.dart';
+import 'package:habitsbegone/viewmodel/controller/login/user_prefrence/users_prefrence.dart';
 
 class LoginViewmodel extends GetxController {
   UsersPrefrence usersPrefrence = UsersPrefrence();

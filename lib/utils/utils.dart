@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:getxmvvm/resources/colors/app_colors.dart';
+import 'package:habitsbegone/resources/colors/app_colors.dart';
 
 class Utils {
   static void fieldFoucsChnage(
@@ -25,6 +25,7 @@ class Utils {
       fontSize: 16.0,
     );
   }
+
   static toastMassageCenter(String meassage) {
     Fluttertoast.showToast(
       // webBgColor: [AppColors.primaryColor,AppColors.seconadryColor],
@@ -45,11 +46,11 @@ class Utils {
       snackPosition: SnackPosition.TOP,
       backgroundColor: AppColors.seconadryColor,
       colorText: AppColors.primaryColor,
-      icon:const Icon(
-        Icons.warning_amber_rounded,color:AppColors.primaryColor,
-        size:30,
-
-      )
+      icon: const Icon(
+        Icons.warning_amber_rounded,
+        color: AppColors.primaryColor,
+        size: 30,
+      ),
     );
   }
 }

@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:getxmvvm/resources/colors/app_colors.dart';
-import 'package:getxmvvm/resources/routes/routes_name.dart';
-import 'package:getxmvvm/view/oboranding_view.dart';
-import 'package:getxmvvm/view/onborading_view2.dart';
-import 'package:getxmvvm/view/onborading_view3.dart';
+import 'package:habitsbegone/resources/colors/app_colors.dart';
+import 'package:habitsbegone/resources/routes/routes_name.dart';
+import 'package:habitsbegone/view/oboranding_view.dart';
+import 'package:habitsbegone/view/onborading_view2.dart';
+import 'package:habitsbegone/view/onborading_view3.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class OnboardingFlow extends StatefulWidget {
@@ -64,29 +64,26 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: AppColors.primaryColor,
-        body: Expanded(
-          child: GestureDetector(
-            onTap: () {
-              _resetTimer(); // Reset timer when user taps
-              _nextPage();
+    return Scaffold(
+      backgroundColor: AppColors.primaryColor,
+      body: SafeArea(
+        child: GestureDetector(
+          onTap: () {
+            _resetTimer(); // Reset timer when user taps
+            _nextPage();
+          },
+          child: PageView(
+            controller: _pageController,
+            onPageChanged: (int page) {
+              setState(() {
+                _currentPage = page;
+              });
             },
-            child: PageView(
-              controller: _pageController,
-
-              onPageChanged: (int page) {
-                setState(() {
-                  _currentPage = page;
-                });
-              },
-              children: [
-                OborandingView(),
-                OborandingView2(),
-                OborandingView3(),
-              ],
-            ),
+            children: [
+              OborandingView(),
+              OborandingView2(),
+              OnboradingView3(),
+            ],
           ),
         ),
       ),

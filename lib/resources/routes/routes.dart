@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
-import 'package:getxmvvm/resources/routes/routes_name.dart';
-import 'package:getxmvvm/view/home_view.dart';
-import 'package:getxmvvm/view/login_view.dart';
-import 'package:getxmvvm/view/oboranding_view.dart';
-import 'package:getxmvvm/view/onboarding_flow.dart';
-import 'package:getxmvvm/view/splash_view.dart';
+import 'package:habitsbegone/resources/routes/routes_name.dart';
+import 'package:habitsbegone/view/home_view.dart';
+import 'package:habitsbegone/view/login_view.dart';
+import 'package:habitsbegone/view/oboranding_view.dart';
+import 'package:habitsbegone/view/onboarding_flow.dart';
+import 'package:habitsbegone/view/splash_view.dart';
 
 class AppRoutes {
   static appRoutes() => [

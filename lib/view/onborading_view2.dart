@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:getxmvvm/resources/colors/app_colors.dart';
-import 'package:getxmvvm/utils/responsive.dart';
+import 'package:habitsbegone/resources/colors/app_colors.dart';
+import 'package:habitsbegone/utils/responsive.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class OborandingView2 extends StatelessWidget {

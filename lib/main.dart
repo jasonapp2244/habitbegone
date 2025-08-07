@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:getxmvvm/resources/getx_localization/language.dart';
-import 'package:getxmvvm/resources/routes/routes.dart';
+import 'package:habitsbegone/resources/getx_localization/language.dart';
+import 'package:habitsbegone/resources/routes/routes.dart';
 
-import 'package:getxmvvm/view/splash_view.dart';
+import 'package:habitsbegone/view/splash_view.dart';
 
 void main() {
   runApp(MyApp());

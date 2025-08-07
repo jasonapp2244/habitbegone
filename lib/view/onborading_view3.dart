@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:getxmvvm/resources/colors/app_colors.dart';
-import 'package:getxmvvm/utils/responsive.dart';
+import 'package:habitsbegone/resources/colors/app_colors.dart';
+import 'package:habitsbegone/utils/responsive.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class OborandingView3 extends StatelessWidget {
-  const OborandingView3({super.key});
+class OnboradingView3 extends StatefulWidget {
+  const OnboradingView3({super.key});
 
   @override
+  State<OnboradingView3> createState() => _OnboradingView3State();
+}
+
+class _OnboradingView3State extends State<OnboradingView3> {
   Widget build(BuildContext context) {
     Responsive.init(context);
 
@@ -141,13 +145,7 @@ class OborandingView3 extends StatelessWidget {
                 ),
               ),
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: Divider(color: AppColors.skyblue, thickness: 2),
-                ),
-              ],
-            ),
+            Divider(color: AppColors.skyblue, thickness: 2),
             Text.rich(
               textAlign: TextAlign.center,
               TextSpan(
