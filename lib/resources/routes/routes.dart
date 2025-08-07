@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 import 'package:getxmvvm/resources/routes/routes_name.dart';
 import 'package:getxmvvm/view/home_view.dart';
 import 'package:getxmvvm/view/login_view.dart';
+import 'package:getxmvvm/view/oboranding_view.dart';
+import 'package:getxmvvm/view/onboarding_flow.dart';
 import 'package:getxmvvm/view/splash_view.dart';
 
 class AppRoutes {
@@ -11,12 +13,26 @@ class AppRoutes {
       page: () => SplashView(),
       transitionDuration: const Duration(milliseconds: 500),
       transition: Transition.leftToRight,
-    ), GetPage(
+    ),
+    GetPage(
+      name: RoutesName.onboardingview,
+      page: () => OborandingView(),
+      transitionDuration: const Duration(milliseconds: 500),
+      transition: Transition.leftToRight,
+    ),
+    GetPage(
+      name: RoutesName.onboardingflow,
+      page: () => OnboardingFlow(),
+      transitionDuration: const Duration(milliseconds: 500),
+      transition: Transition.leftToRight,
+    ),
+    GetPage(
       name: RoutesName.loginview,
       page: () => LogiView(),
       transitionDuration: const Duration(milliseconds: 500),
       transition: Transition.leftToRight,
-    ), GetPage(
+    ),
+    GetPage(
       name: RoutesName.homeview,
       page: () => HomeView(),
       transitionDuration: const Duration(milliseconds: 500),

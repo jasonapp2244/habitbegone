@@ -39,9 +39,9 @@ class _HomeViewState extends State<HomeView> {
       case 0:
         return _buildHomeContent();
       case 1:
-        return _buildSearchContent();
+        return Container();
       case 2:
-        return _buildProfileContent();
+        return Container();
       default:
         return _buildHomeContent();
     }
@@ -49,7 +49,7 @@ class _HomeViewState extends State<HomeView> {
 
   Widget _buildHomeContent() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       child: Column(
         children: [
           Row(
@@ -89,27 +89,27 @@ class _HomeViewState extends State<HomeView> {
             children: [
               Container(
                 padding: EdgeInsets.all(10),
-                width: Responsive.w(45),
-                height: 135,
+                width: Responsive.w(44),
+                height: 110,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(22),
-                  color: AppColors.textBuleColor,
+                  color: AppColors.seconadryColor,
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(6.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SvgPicture.asset("assets/images/Layer_1 (1).svg"),
-                      SizedBox(height: 20),
+                      SizedBox(height: Responsive.h(2)),
                       Text(
                         "Hypnotherapy",
                         textAlign: TextAlign.center,
                         style: GoogleFonts.teachers(
                           fontWeight: FontWeight.w500,
                           color: AppColors.primaryColor,
-                          fontSize: Responsive.textScaleFactor * 14,
+                          fontSize: Responsive.textScaleFactor * 12,
                         ),
                       ),
                     ],
@@ -118,27 +118,27 @@ class _HomeViewState extends State<HomeView> {
               ),
               Container(
                 padding: EdgeInsets.all(10),
-                width: Responsive.w(45),
-                height: 135,
+                width: Responsive.w(44),
+                height: 110,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(22),
-                  color: AppColors.skyblue,
+                  color: AppColors.yellow,
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(6.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SvgPicture.asset("assets/images/Layer_1 (2).svg"),
-                      SizedBox(height: 20),
+                      SvgPicture.asset("assets/images/Layer_1 (4).svg"),
+                      SizedBox(height: Responsive.h(2)),
                       Text(
-                        "Elec-magnetic Therapy",
+                        "Massage Therapy",
                         textAlign: TextAlign.center,
                         style: GoogleFonts.teachers(
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.primaryColor,
-                          fontSize: Responsive.textScaleFactor * 14,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.textColorBlack,
+                          fontSize: Responsive.textScaleFactor * 12,
                         ),
                       ),
                     ],
@@ -153,56 +153,57 @@ class _HomeViewState extends State<HomeView> {
             children: [
               Container(
                 padding: EdgeInsets.all(10),
-                width: Responsive.w(45),
-                height: 135,
+                width: Responsive.w(44),
+                height: 110,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(22),
-                  color: AppColors.textBuleColor,
+                  color: AppColors.skyblue,
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(6.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SvgPicture.asset("assets/images/Layer_1 (4).svg"),
-                      SizedBox(height: 20),
+                      SvgPicture.asset("assets/images/Layer_1 (2).svg"),
+                      SizedBox(height: Responsive.h(2)),
                       Text(
-                        "Osteopathy",
-                        textAlign: TextAlign.center,
+                        "Elec-magnetic Therapy",
+                        textAlign: TextAlign.start,
                         style: GoogleFonts.teachers(
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w400,
                           color: AppColors.primaryColor,
-                          fontSize: Responsive.textScaleFactor * 14,
+                          fontSize: Responsive.textScaleFactor * 12,
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
+
               Container(
                 padding: EdgeInsets.all(10),
-                width: Responsive.w(45),
-                height: 135,
+                width: Responsive.w(44),
+                height: 110,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(22),
-                  color: AppColors.skyblue,
+                  color: AppColors.waterBlueColor,
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(6.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SvgPicture.asset("assets/images/Layer_1 (3).svg"),
-                      SizedBox(height: 20),
+                      SizedBox(height: Responsive.h(2)),
                       Text(
                         "Osteopathy",
                         textAlign: TextAlign.center,
                         style: GoogleFonts.teachers(
                           fontWeight: FontWeight.w400,
                           color: AppColors.primaryColor,
-                          fontSize: Responsive.textScaleFactor * 14,
+                          fontSize: Responsive.textScaleFactor * 12,
                         ),
                       ),
                     ],
@@ -210,119 +211,6 @@ class _HomeViewState extends State<HomeView> {
                 ),
               ),
             ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSearchContent() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 20),
-          Text(
-            "Search",
-            style: GoogleFonts.teachers(
-              fontWeight: FontWeight.w500,
-              color: AppColors.textColorBlack,
-              fontSize: 32,
-            ),
-          ),
-          SizedBox(height: 20),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            decoration: BoxDecoration(
-              color: Colors.grey[100],
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: "Search for treatments...",
-                border: InputBorder.none,
-                icon: Icon(Icons.search, color: AppColors.filledtextColor),
-              ),
-            ),
-          ),
-          SizedBox(height: 30),
-          Expanded(
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.search,
-                    size: 64,
-                    color: AppColors.filledtextColor,
-                  ),
-                  SizedBox(height: 16),
-                  Text(
-                    "Start searching for treatments",
-                    style: GoogleFonts.teachers(
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.filledtextColor,
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildProfileContent() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 20),
-          Text(
-            "Profile",
-            style: GoogleFonts.teachers(
-              fontWeight: FontWeight.w500,
-              color: AppColors.textColorBlack,
-              fontSize: 32,
-            ),
-          ),
-          SizedBox(height: 30),
-          Center(
-            child: Column(
-              children: [
-                CircleAvatar(
-                  radius: 50,
-                  backgroundColor: AppColors.skyblue,
-                  child: Icon(
-                    Icons.person,
-                    size: 50,
-                    color: AppColors.primaryColor,
-                  ),
-                ),
-                SizedBox(height: 20),
-                Text(
-                  "John Doe",
-                  style: GoogleFonts.teachers(
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.textColorBlack,
-                    fontSize: 24,
-                  ),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  "johndoe@example.com",
-                  style: GoogleFonts.teachers(
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.filledtextColor,
-                    fontSize: 16,
-                  ),
-                ),
-              ],
-            ),
           ),
         ],
       ),

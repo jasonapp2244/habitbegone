@@ -36,7 +36,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
             isSelected: currentIndex == 0,
           ),
           _buildNavItem(
-            assetPath: 'assets/icons/search.svg',
+            assetPath: 'assets/icons/mdi_planner.svg',
             index: 1,
             isSelected: currentIndex == 1,
           ),
@@ -66,18 +66,18 @@ class CustomBottomNavigationBar extends StatelessWidget {
               assetPath,
               color:
                   isSelected
-                      ? AppColors.textBuleColor
+                      ? AppColors.textColorBlack
                       : AppColors.filledtextColor,
               height: 24,
               width: 24,
             ),
             SizedBox(height: 4),
             Container(
-              width: 6,
-              height: 6,
+              width: 4,
+              height: 4,
               decoration: BoxDecoration(
                 color:
-                    isSelected ? AppColors.textBuleColor : Colors.transparent,
+                    isSelected ? AppColors.textColorBlack : Colors.transparent,
                 shape: BoxShape.circle,
               ),
             ),

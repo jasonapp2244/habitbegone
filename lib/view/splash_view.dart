@@ -15,11 +15,11 @@ class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
     super.initState();
-    // splashServices.isLogin();
-    // Navigator.pushReplacement(
-    //   context,
-    //   MaterialPageRoute(builder: (_) => OborandingView()),
-    // );
+    // FOR TESTING: Reset first launch flag to test onboarding flow
+    // Comment this out after testing
+    splashServices.usersPrefrence.resetFirstLaunch().then((_) {
+      splashServices.checkAppState();
+    });
   }
 
   @override

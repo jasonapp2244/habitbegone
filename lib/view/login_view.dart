@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:getxmvvm/resources/colors/app_colors.dart';
 import 'package:getxmvvm/utils/responsive.dart';
 import 'package:getxmvvm/utils/utils.dart';
+import 'package:getxmvvm/view/home_view.dart';
 import 'package:getxmvvm/widgets/auth_button.dart';
 import 'package:getxmvvm/widgets/components/social_bitton.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -211,19 +212,11 @@ class _LogiViewState extends State<LogiView> {
                         // context,
                       );
                     } else {
-                      // Navigator.pushReplacement(
-                      //   context,
-                      //   MaterialPageRoute(builder: (_) => RoleSelectionScreen()),
-                      // );
-                      // Navigator.pushReplacementNamed(context, RoutesName.homeview);
-                      // Map<String, String> headr = {
-                      //   "x-api-key": "reqres-free-v1",
-                      // };
-                      // Map data = {
-                      //   'email': emailController.text.toString(),
-                      //   'password': passwordController.text.toString(),
-                      // };
-                      // authViewmodel.loginApi(data, headr, context);
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (_) => HomeView()),
+                      );
+                     
                     }
                   },
                 ),
@@ -314,17 +307,14 @@ class _LogiViewState extends State<LogiView> {
       height: Responsive.h(6), // 6% of screen height
       width: Responsive.w(25), // 20% of screen width
       decoration: BoxDecoration(
-        
         border: BoxBorder.all(color: AppColors.filledColor),
-        borderRadius: BorderRadius.circular(
-          Responsive.w(5.5),),
-        
+        borderRadius: BorderRadius.circular(Responsive.w(5.5)),
+
         color: AppColors.primaryColor,
       ),
       child: Padding(
         padding: EdgeInsets.all(Responsive.w(3)),
-        child: 
-        SvgPicture.asset(iconPath)
+        child: SvgPicture.asset(iconPath),
         // Image(image: AssetImage(iconPath)),
         // Image( iconPath),
       ),
