@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:habitsbegone/resources/colors/app_colors.dart';
+import 'package:habitsbegone/resources/routes/routes_name.dart';
 import 'package:habitsbegone/utils/responsive.dart';
 import 'package:habitsbegone/utils/utils.dart';
 import 'package:habitsbegone/widgets/auth_button.dart';
@@ -18,7 +19,9 @@ class SignUpView extends StatefulWidget {
 class _SignUpViewState extends State<SignUpView> {
   final ValueNotifier<bool> _obsecurePassword = ValueNotifier<bool>(true);
   TextEditingController emailController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  FocusNode nameFoucsNode = FocusNode();
   FocusNode emailFoucsNode = FocusNode();
   FocusNode passwordFoucsNode = FocusNode();
   FocusNode sumbitFoucsNode = FocusNode();
@@ -85,8 +88,8 @@ class _SignUpViewState extends State<SignUpView> {
                 SizedBox(height: Responsive.h(3)),
                 TextFormField(
                   style: TextStyle(color: AppColors.textColorBlack),
-                  controller: emailController,
-                  focusNode: emailFoucsNode,
+                  controller: nameController,
+                  focusNode: nameFoucsNode,
                   cursorColor: AppColors.textColorBlack,
                   cursorErrorColor: AppColors.seconadryColor,
                   keyboardType: TextInputType.emailAddress,
@@ -241,6 +244,10 @@ class _SignUpViewState extends State<SignUpView> {
                         // context,
                       );
                     } else {
+                      Navigator.pushReplacementNamed(
+                        context,
+                        RoutesName.choseplanView,
+                      );
                       // Navigator.pushReplacement(
                       //   context,
                       //   MaterialPageRoute(builder: (_) => RoleSelectionScreen()),
@@ -320,10 +327,10 @@ class _SignUpViewState extends State<SignUpView> {
                                     //   //   builder: (_) => Sginupview(),
                                     //   // ),
                                     // );
-                                    // Navigator.pushReplacementNamed(
-                                    //   context,
-                                    //   RoutesName.signview,
-                                    // );
+                                    Navigator.pushReplacementNamed(
+                                      context,
+                                      RoutesName.loginview,
+                                    );
                                   },
                           ),
                         ],

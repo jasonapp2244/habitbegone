@@ -24,8 +24,6 @@ class _SplashViewState extends State<SplashView> {
       backgroundColor: AppColors.primaryColor,
       body: SafeArea(
         child: Column(
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Column(
               mainAxisAlignment: MainAxisAlignment.center,

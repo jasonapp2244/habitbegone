@@ -36,7 +36,7 @@ class SplashServices {
       if (token == null || token.isEmpty) {
         Timer(
           const Duration(seconds: 3),
-          () => Get.toNamed(RoutesName.loginview),
+          () => Get.toNamed(RoutesName.authmanager),
         );
       } else {
         Timer(

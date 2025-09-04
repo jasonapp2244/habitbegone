@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:habitsbegone/resources/colors/app_colors.dart';
+import 'package:habitsbegone/resources/routes/routes_name.dart';
 import 'package:habitsbegone/utils/responsive.dart';
+import 'package:habitsbegone/view/cousre_view.dart';
+import 'package:habitsbegone/view/profile_view.dart';
 import 'package:habitsbegone/widgets/bottom_navigation_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -39,9 +43,9 @@ class _HomeViewState extends State<HomeView> {
       case 0:
         return _buildHomeContent();
       case 1:
-        return Container();
+        return MyTakenCousreView();
       case 2:
-        return Container();
+        return ProfileView();
       default:
         return _buildHomeContent();
     }
@@ -87,61 +91,75 @@ class _HomeViewState extends State<HomeView> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                padding: EdgeInsets.all(10),
-                width: Responsive.w(44),
-                height: 110,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(22),
-                  color: AppColors.seconadryColor,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset("assets/images/Layer_1 (1).svg"),
-                      SizedBox(height: Responsive.h(2)),
-                      Text(
-                        "Hypnotherapy",
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.teachers(
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.primaryColor,
-                          fontSize: Responsive.textScaleFactor * 12,
+              GestureDetector(
+                onTap:
+                    () => Navigator.pushNamed(
+                      context,
+                      RoutesName.hypnotherapyview,
+                    ),
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  width: Responsive.w(44),
+                  height: 110,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(22),
+                    color: AppColors.seconadryColor,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset("assets/images/Layer_1 (1).svg"),
+                        SizedBox(height: Responsive.h(2)),
+                        Text(
+                          "Hypnotherapy",
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.teachers(
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.primaryColor,
+                            fontSize: Responsive.textScaleFactor * 12,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.all(10),
-                width: Responsive.w(44),
-                height: 110,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(22),
-                  color: AppColors.yellow,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset("assets/images/Layer_1 (4).svg"),
-                      SizedBox(height: Responsive.h(2)),
-                      Text(
-                        "Massage Therapy",
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.teachers(
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.textColorBlack,
-                          fontSize: Responsive.textScaleFactor * 12,
+              GestureDetector(
+                onTap:
+                    () => Navigator.pushNamed(
+                      context,
+                      RoutesName.massagetherapyview,
+                    ),
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  width: Responsive.w(44),
+                  height: 110,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(22),
+                    color: AppColors.yellow,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset("assets/images/Layer_1 (4).svg"),
+                        SizedBox(height: Responsive.h(2)),
+                        Text(
+                          "Massage Therapy",
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.teachers(
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.textColorBlack,
+                            fontSize: Responsive.textScaleFactor * 12,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -151,62 +169,74 @@ class _HomeViewState extends State<HomeView> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                padding: EdgeInsets.all(10),
-                width: Responsive.w(44),
-                height: 110,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(22),
-                  color: AppColors.skyblue,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset("assets/images/Layer_1 (2).svg"),
-                      SizedBox(height: Responsive.h(2)),
-                      Text(
-                        "Elec-magnetic Therapy",
-                        textAlign: TextAlign.start,
-                        style: GoogleFonts.teachers(
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.primaryColor,
-                          fontSize: Responsive.textScaleFactor * 12,
+              GestureDetector(
+                onTap:
+                    () => Navigator.pushNamed(
+                      context,
+                      RoutesName.elecmagnetictherapy,
+                    ),
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  width: Responsive.w(44),
+                  height: 110,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(22),
+                    color: AppColors.skyblue,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset("assets/images/Layer_1 (2).svg"),
+                        SizedBox(height: Responsive.h(2)),
+                        Text(
+                          "Elec-magnetic Therapy",
+                          textAlign: TextAlign.start,
+                          style: GoogleFonts.teachers(
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.primaryColor,
+                            fontSize: Responsive.textScaleFactor * 12,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
 
-              Container(
-                padding: EdgeInsets.all(10),
-                width: Responsive.w(44),
-                height: 110,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(22),
-                  color: AppColors.waterBlueColor,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset("assets/images/Layer_1 (3).svg"),
-                      SizedBox(height: Responsive.h(2)),
-                      Text(
-                        "Osteopathy",
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.teachers(
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.primaryColor,
-                          fontSize: Responsive.textScaleFactor * 12,
+              GestureDetector(
+                onTap:
+                    () =>
+                        Navigator.pushNamed(context, RoutesName.osteopathyview),
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  width: Responsive.w(44),
+                  height: 110,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(22),
+                    color: AppColors.waterBlueColor,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset("assets/images/Layer_1 (3).svg"),
+                        SizedBox(height: Responsive.h(2)),
+                        Text(
+                          "Osteopathy",
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.teachers(
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.primaryColor,
+                            fontSize: Responsive.textScaleFactor * 12,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
