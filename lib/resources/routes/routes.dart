@@ -7,15 +7,15 @@ import 'package:habitsbegone/view/cousre_view.dart';
 import 'package:habitsbegone/view/elec_magnetic_view.dart';
 import 'package:habitsbegone/view/home_view.dart';
 import 'package:habitsbegone/view/hypnotherapy_view.dart';
-import 'package:habitsbegone/view/login_view.dart';
+import 'package:habitsbegone/view/auth/login_view.dart';
 import 'package:habitsbegone/view/massage_view.dart';
 import 'package:habitsbegone/view/me_myself_Program_view.dart';
-import 'package:habitsbegone/view/oboranding_view.dart';
+import 'package:habitsbegone/view/auth/oboranding_view.dart';
 import 'package:habitsbegone/view/onboarding_flow.dart';
 import 'package:habitsbegone/view/one_on_one_view.dart';
 import 'package:habitsbegone/view/osteopathy_view.dart';
-import 'package:habitsbegone/view/sign_up_view.dart';
-import 'package:habitsbegone/view/splash_view.dart';
+import 'package:habitsbegone/view/auth/sign_up_view.dart';
+import 'package:habitsbegone/view/auth/splash_view.dart';
 
 class AppRoutes {
   static appRoutes() => [
@@ -45,7 +45,7 @@ class AppRoutes {
     ),
     GetPage(
       name: RoutesName.loginview,
-      page: () => LogiView(),
+      page: () => LoginView(),
       transitionDuration: const Duration(milliseconds: 500),
       transition: Transition.leftToRight,
     ),

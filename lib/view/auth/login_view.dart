@@ -1,39 +1,135 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:habitsbegone/resources/colors/app_colors.dart';
+import 'package:habitsbegone/resources/routes/routes_name.dart';
 import 'package:habitsbegone/utils/responsive.dart';
 import 'package:habitsbegone/utils/utils.dart';
 import 'package:habitsbegone/view/home_view.dart';
-import 'package:habitsbegone/view/sign_up_view.dart';
+import 'package:habitsbegone/view/auth/sign_up_view.dart';
 import 'package:habitsbegone/widgets/auth_button.dart';
 import 'package:habitsbegone/widgets/components/social_bitton.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LogiView extends StatefulWidget {
-  const LogiView({super.key});
+class LoginView extends StatefulWidget {
+  const LoginView({super.key});
 
   @override
-  State<LogiView> createState() => _LogiViewState();
+  State<LoginView> createState() => _LoginViewState();
 }
 
-class _LogiViewState extends State<LogiView> {
+class _LoginViewState extends State<LoginView> {
   final ValueNotifier<bool> _obsecurePassword = ValueNotifier<bool>(true);
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  final _auth = FirebaseAuth.instance;
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
   FocusNode emailFoucsNode = FocusNode();
   FocusNode passwordFoucsNode = FocusNode();
   FocusNode sumbitFoucsNode = FocusNode();
+  // bool _loading = false;
+  final _firestore = FirebaseFirestore.instance;
 
   @override
   void dispose() {
     super.dispose();
-    emailController.dispose();
-    passwordController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
     passwordFoucsNode.dispose();
     emailFoucsNode.dispose();
     _obsecurePassword.dispose();
   }
+
+  bool _loading = false;
+
+  Future<void> _login() async {
+    setState(() => _loading = true);
+    try {
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      User? user = userCredential.user;
+
+      if (user != null) {
+        if (user.emailVerified) {
+          await _firestore.collection('users').doc(user.uid).update({
+            'uid': user.uid,
+            'email': user.email,
+            'isPaid': false,
+            'isBlocked': false,
+            'emailVerified': user.emailVerified,
+            'lastOnline': FieldValue.serverTimestamp(),
+          });
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeView()),
+          );
+        } else {
+          await user.sendEmailVerification(); // optional re-send
+          await _auth.signOut();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'Please verify your email before logging in.',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          );
+        }
+      }
+    } on FirebaseAuthException catch (e) {
+      String message = '';
+      if (e.code == 'user-not-found')
+        message = 'No user found with this email.';
+      if (e.code == 'wrong-password') message = 'Incorrect password.';
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
+    } finally {
+      setState(() => _loading = false);
+    }
+  }
+
+  // Future<void> _login() async {
+  //   setState(() => _loading = true);
+  //   try {
+  //     await _auth.signInWithEmailAndPassword(
+  //       email: _emailController.text.trim(),
+  //       password: _passwordController.text.trim(),
+  //     );
+
+  //     Navigator.pushReplacement(
+  //       context,
+  //       MaterialPageRoute(builder: (_) => HomeView()),
+  //     );
+  //   } on FirebaseAuthException catch (e) {
+  //     String message = '';
+  //     if (e.code == 'user-not-found')
+  //       message = 'No user found with this email.';
+  //     if (e.code == 'wrong-password') message = 'Incorrect password.';
+  //     ScaffoldMessenger.of(
+  //       context,
+  //     ).showSnackBar(SnackBar(content: Text(message)));
+  //   } finally {
+  //     setState(() => _loading = false);
+  //   }
+  //   //   Future<void> _login() async {
+  //   //     setState(() {
+  //   //       _islogin = true;
+  //   //     });
+  //   //     try {
+  //   //       await _auth.signInWithEmailAndPassword(
+  //   //         email: _emailController.text.trim(),
+  //   //         password: _passwordController.text.trim(),
+  //   //       );
+  //   //       Navigator.pushReplacementNamed(context, RoutesName.homeview);
+  //   //     }on FirebaseException catch (e) {
+  //   //  if (e.code == 'user-not-found') message = 'No user found with this email.';    }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +183,7 @@ class _LogiViewState extends State<LogiView> {
                 SizedBox(height: Responsive.h(3)),
                 TextFormField(
                   style: TextStyle(color: AppColors.textColorBlack),
-                  controller: emailController,
+                  controller: _emailController,
                   focusNode: emailFoucsNode,
                   cursorColor: AppColors.textColorBlack,
                   cursorErrorColor: AppColors.seconadryColor,
@@ -132,7 +228,7 @@ class _LogiViewState extends State<LogiView> {
                   builder: (context, value, child) {
                     return TextFormField(
                       style: TextStyle(color: AppColors.textColorBlack),
-                      controller: passwordController,
+                      controller: _passwordController,
                       focusNode: passwordFoucsNode,
                       cursorColor: AppColors.textColorBlack,
                       cursorErrorColor: AppColors.seconadryColor,
@@ -200,23 +296,29 @@ class _LogiViewState extends State<LogiView> {
                 SizedBox(height: Responsive.h(2.5)),
                 AuthButton(
                   buttontext: "Login",
-                  loading: false,
+                  loading: _loading,
                   //  authViewmodel.loading,
                   onPress: () {
-                    if (emailController.text.isEmpty) {
+                    if (_emailController.text.isEmpty) {
                       Utils.toastMassage("Please Enter Email First");
-                    } else if (passwordController.text.isEmpty) {
+                    } else if (_passwordController.text.isEmpty) {
                       Utils.toastMassage("Please Enter Password First");
-                    } else if (passwordController.text.length < 8) {
+                    } else if (_passwordController.text.length < 8) {
                       Utils.toastMassage(
                         "Please Enter 8 digits",
                         // context,
                       );
                     } else {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (_) => HomeView()),
-                      );
+                      _login();
+                      // Navigator.pushReplacementNamed(
+                      //   context,
+                      //   RoutesName.homeview,
+                      // );
+
+                      // Navigator.pushReplacement(
+                      //   context,
+                      //   MaterialPageRoute(builder: (_) => HomeView()),
+                      // );
                     }
                   },
                 ),

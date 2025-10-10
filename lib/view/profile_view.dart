@@ -1,11 +1,38 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:habitsbegone/resources/colors/app_colors.dart';
+import 'package:habitsbegone/view/auth/login_view.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final _firestore = FirebaseFirestore.instance;
+    final _auth = FirebaseAuth.instance;
+    final User? user = _auth.currentUser;
+    final uid = user?.uid;
+
+    Future<void> _signOutUser(BuildContext context) async {
+      // UserCredential userCredential = await _auth
+      // After sign-out, navigate back to login
+      await _firestore.collection('users').doc(uid).update({
+        'uid': user?.uid,
+        'email': user?.email,
+        'isPaid': false,
+        'isBlocked': false,
+        'emailVerified': user?.emailVerified,
+        'lastOnline': FieldValue.serverTimestamp(),
+      });
+      await FirebaseAuth.instance.signOut();
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginView()),
+        (route) => false, // remove all previous routes
+      );
+    }
+
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
       body: SafeArea(
@@ -95,6 +122,13 @@ class ProfileView extends StatelessWidget {
                       fontFamily: 'Inter',
                       fontWeight: FontWeight.w500,
                     ),
+                  ),
+
+                  ElevatedButton(
+                    onPressed: () {
+                      _signOutUser(context);
+                    },
+                    child: Text("data"),
                   ),
                 ],
               ),

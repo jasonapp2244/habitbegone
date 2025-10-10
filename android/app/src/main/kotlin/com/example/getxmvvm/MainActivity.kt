@@ -1,4 +1,4 @@
-package com.test1.habit
+package com.craftech.habit
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:habitsbegone/resources/colors/app_colors.dart';
 import 'package:habitsbegone/resources/routes/routes_name.dart';
-import 'package:habitsbegone/view/oboranding_view.dart';
+import 'package:habitsbegone/view/auth/oboranding_view.dart';
 import 'package:habitsbegone/view/onborading_view2.dart';
 import 'package:habitsbegone/view/onborading_view3.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class OnboardingFlow extends StatefulWidget {
   const OnboardingFlow({super.key});
@@ -79,11 +78,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
                 _currentPage = page;
               });
             },
-            children: [
-              OborandingView(),
-              OborandingView2(),
-              OnboradingView3(),
-            ],
+            children: [OborandingView(), OborandingView2(), OnboradingView3()],
           ),
         ),
       ),

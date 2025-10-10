@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -5,6 +7,9 @@ import 'package:habitsbegone/resources/colors/app_colors.dart';
 import 'package:habitsbegone/resources/routes/routes_name.dart';
 import 'package:habitsbegone/utils/responsive.dart';
 import 'package:habitsbegone/utils/utils.dart';
+import 'package:habitsbegone/view/auth/login_view.dart';
+import 'package:habitsbegone/view/home_view.dart';
+import 'package:habitsbegone/view/onboarding_flow.dart';
 import 'package:habitsbegone/widgets/auth_button.dart';
 import 'package:habitsbegone/widgets/components/social_bitton.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,10 +22,14 @@ class SignUpView extends StatefulWidget {
 }
 
 class _SignUpViewState extends State<SignUpView> {
+  bool _loading = false;
+  final _auth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance;
+  final _formKey = GlobalKey<FormState>();
   final ValueNotifier<bool> _obsecurePassword = ValueNotifier<bool>(true);
-  TextEditingController emailController = TextEditingController();
-  TextEditingController nameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
   FocusNode nameFoucsNode = FocusNode();
   FocusNode emailFoucsNode = FocusNode();
   FocusNode passwordFoucsNode = FocusNode();
@@ -29,11 +38,76 @@ class _SignUpViewState extends State<SignUpView> {
   @override
   void dispose() {
     super.dispose();
-    emailController.dispose();
-    passwordController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
     passwordFoucsNode.dispose();
     emailFoucsNode.dispose();
     _obsecurePassword.dispose();
+  }
+
+  Future<void> _signUp() async {
+    // if (!_formKey.currentState!.validate()) return;
+
+    setState(() => _loading = true);
+
+    try {
+      // 1️⃣ Create Firebase user
+      UserCredential userCredential = await _auth
+          .createUserWithEmailAndPassword(
+            email: _emailController.text.trim(),
+            password: _passwordController.text.trim(),
+          );
+
+      User? user = userCredential.user;
+
+      if (user != null) {
+        // 2️⃣ Send verification email
+        await user.sendEmailVerification();
+
+        // 3️⃣ Save user data in Firestore
+        await _firestore.collection('users').doc(user.uid).set({
+          'uid': user.uid,
+          'email': user.email,
+          'name': _nameController.text.trim(),
+          'isPaid': false,
+          'isBlocked': false,
+          'emailVerified': user.emailVerified,
+          'joinedAt': FieldValue.serverTimestamp(),
+        });
+
+        // 4️⃣ Inform the user
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Verification email sent! Please verify before login.',
+            ),
+          ),
+        );
+
+        // 5️⃣ Navigate to login
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => LoginView()),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      String error = '';
+      if (e.code == 'email-already-in-use') {
+        error = 'Email already in use.';
+      } else if (e.code == 'invalid-email') {
+        error = 'Invalid email format.';
+      } else if (e.code == 'weak-password') {
+        error = 'Password should be at least 6 characters.';
+      } else {
+        error = 'Something went wrong. Please try again.';
+      }
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(error)));
+    } finally {
+      setState(() => _loading = false);
+    }
   }
 
   @override
@@ -88,7 +162,7 @@ class _SignUpViewState extends State<SignUpView> {
                 SizedBox(height: Responsive.h(3)),
                 TextFormField(
                   style: TextStyle(color: AppColors.textColorBlack),
-                  controller: nameController,
+                  controller: _nameController,
                   focusNode: nameFoucsNode,
                   cursorColor: AppColors.textColorBlack,
                   cursorErrorColor: AppColors.seconadryColor,
@@ -132,7 +206,7 @@ class _SignUpViewState extends State<SignUpView> {
                 SizedBox(height: Responsive.h(3)),
                 TextFormField(
                   style: TextStyle(color: AppColors.textColorBlack),
-                  controller: emailController,
+                  controller: _emailController,
                   focusNode: emailFoucsNode,
                   cursorColor: AppColors.textColorBlack,
                   cursorErrorColor: AppColors.seconadryColor,
@@ -177,7 +251,7 @@ class _SignUpViewState extends State<SignUpView> {
                   builder: (context, value, child) {
                     return TextFormField(
                       style: TextStyle(color: AppColors.textColorBlack),
-                      controller: passwordController,
+                      controller: _passwordController,
                       focusNode: passwordFoucsNode,
                       cursorColor: AppColors.textColorBlack,
                       cursorErrorColor: AppColors.seconadryColor,
@@ -231,23 +305,24 @@ class _SignUpViewState extends State<SignUpView> {
                 SizedBox(height: Responsive.h(2.5)),
                 AuthButton(
                   buttontext: "Signup",
-                  loading: false,
+                  loading: _loading,
                   //  authViewmodel.loading,
                   onPress: () {
-                    if (emailController.text.isEmpty) {
+                    if (_emailController.text.isEmpty) {
                       Utils.toastMassage("Please Enter Email First");
-                    } else if (passwordController.text.isEmpty) {
+                    } else if (_passwordController.text.isEmpty) {
                       Utils.toastMassage("Please Enter Password First");
-                    } else if (passwordController.text.length < 8) {
+                    } else if (_passwordController.text.length < 8) {
                       Utils.toastMassage(
                         "Please Enter 8 digits",
                         // context,
                       );
                     } else {
-                      Navigator.pushReplacementNamed(
-                        context,
-                        RoutesName.choseplanView,
-                      );
+                      _signUp();
+                      // Navigator.pushReplacementNamed(
+                      //   context,
+                      //   RoutesName.choseplanView,
+                      // );
                       // Navigator.pushReplacement(
                       //   context,
                       //   MaterialPageRoute(builder: (_) => RoleSelectionScreen()),
