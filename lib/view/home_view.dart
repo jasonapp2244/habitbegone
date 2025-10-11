@@ -1,9 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:habitsbegone/resources/colors/app_colors.dart';
 import 'package:habitsbegone/resources/routes/routes_name.dart';
 import 'package:habitsbegone/utils/responsive.dart';
 import 'package:habitsbegone/view/cousre_view.dart';
+import 'package:habitsbegone/view/elec_magnetic_view.dart';
+import 'package:habitsbegone/view/hypnotherapy_view.dart';
+import 'package:habitsbegone/view/massage_view.dart';
+import 'package:habitsbegone/view/osteopathy_view.dart';
 import 'package:habitsbegone/view/profile_view.dart';
 import 'package:habitsbegone/widgets/bottom_navigation_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,12 +21,29 @@ class HomeView extends StatefulWidget {
   State<HomeView> createState() => _HomeViewState();
 }
 
+final _firestore = FirebaseFirestore.instance;
+final _auth = FirebaseAuth.instance;
+final User? user = _auth.currentUser;
+final uid = user?.uid;
+
 class _HomeViewState extends State<HomeView> {
   int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    updateLoginTime(context);
+  }
 
   void _onTabSelected(int index) {
     setState(() {
       _currentIndex = index;
+    });
+  }
+
+  Future<void> updateLoginTime(BuildContext context) async {
+    await _firestore.collection('users').doc(uid).update({
+      'lastOnline': FieldValue.serverTimestamp(),
     });
   }
 
@@ -92,10 +115,14 @@ class _HomeViewState extends State<HomeView> {
             children: [
               GestureDetector(
                 onTap:
-                    () => Navigator.pushNamed(
+                    () => Navigator.push(
                       context,
-                      RoutesName.hypnotherapyview,
+                      MaterialPageRoute(builder: (_) => HypnotherapyView()),
                     ),
+                // Navigator.pushNamed(
+                //   context,
+                //   RoutesName.hypnotherapyview,
+                // ),
                 child: Container(
                   padding: EdgeInsets.all(10),
                   width: Responsive.w(44),
@@ -128,10 +155,14 @@ class _HomeViewState extends State<HomeView> {
               ),
               GestureDetector(
                 onTap:
-                    () => Navigator.pushNamed(
+                    () => Navigator.push(
                       context,
-                      RoutesName.massagetherapyview,
+                      MaterialPageRoute(builder: (_) => MassageTherapyView()),
                     ),
+                // () => Navigator.pushNamed(
+                //   context,
+                //   RoutesName.massagetherapyview,
+                // ),
                 child: Container(
                   padding: EdgeInsets.all(10),
                   width: Responsive.w(44),
@@ -170,10 +201,14 @@ class _HomeViewState extends State<HomeView> {
             children: [
               GestureDetector(
                 onTap:
-                    () => Navigator.pushNamed(
+                    () => Navigator.push(
                       context,
-                      RoutesName.elecmagnetictherapy,
+                      MaterialPageRoute(builder: (_) => ElecMagneticView()),
                     ),
+                //  Navigator.pushNamed(
+                //   context,
+                //   RoutesName.elecmagnetictherapy,
+                // ),
                 child: Container(
                   padding: EdgeInsets.all(10),
                   width: Responsive.w(44),
@@ -207,8 +242,12 @@ class _HomeViewState extends State<HomeView> {
 
               GestureDetector(
                 onTap:
-                    () =>
-                        Navigator.pushNamed(context, RoutesName.osteopathyview),
+                    () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => OsteopathyView()),
+                    ),
+                // () =>
+                //     Navigator.pushNamed(context, RoutesName.osteopathyview),
                 child: Container(
                   padding: EdgeInsets.all(10),
                   width: Responsive.w(44),

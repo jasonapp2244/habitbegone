@@ -29,14 +29,14 @@ class _MyTakenCousreViewState extends State<MyTakenCousreView> {
                     Row(
                       spacing: 2,
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: SvgPicture.asset(
-                            "assets/icons/Arrow - Right 3.svg",
-                          ),
-                        ),
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     Navigator.pop(context);
+                        //   },
+                        //   child: SvgPicture.asset(
+                        //     "assets/icons/Arrow - Right 3.svg",
+                        //   ),
+                        // ),
                         SizedBox(width: Responsive.w(1)),
                         Text(
                           'Collective Program',
@@ -49,7 +49,7 @@ class _MyTakenCousreViewState extends State<MyTakenCousreView> {
                         ),
                       ],
                     ),
-                    circularIcon("assets/icons/robotic.svg"),
+                    // circularIcon("assets/icons/robotic.svg"),
                   ],
                 ),
                 CourseContentWidget(),
@@ -180,7 +180,6 @@ void _courseCompleteAlert(BuildContext context) {
     },
   );
 }
-
 
 Widget circularIcon(String image) {
   return Container(

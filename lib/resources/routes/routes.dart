@@ -69,7 +69,7 @@ class AppRoutes {
     ),
     GetPage(
       name: RoutesName.massagetherapyview,
-      page: () => MassageView(),
+      page: () => MassageTherapyView(),
       transitionDuration: const Duration(milliseconds: 500),
       transition: Transition.leftToRight,
     ),

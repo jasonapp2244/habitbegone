@@ -10,19 +10,39 @@ class ProfileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _firestore = FirebaseFirestore.instance;
-    final _auth = FirebaseAuth.instance;
-    final User? user = _auth.currentUser;
-    final uid = user?.uid;
+    // final _auth = FirebaseAuth.instance;
+    final currentUser = FirebaseAuth.instance.currentUser;
 
+    // final User? user = _auth.currentUser;
+    final uid = currentUser?.uid;
+    if (currentUser == null) {
+      return const Center(
+        child: Text(
+          'No user logged in',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 14,
+            fontFamily: 'Teachers',
+            fontWeight: FontWeight.w500,
+            height: 1.40,
+          ),
+        ),
+      );
+    }
+    final userDoc =
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(currentUser.uid)
+            .snapshots();
     Future<void> _signOutUser(BuildContext context) async {
       // UserCredential userCredential = await _auth
       // After sign-out, navigate back to login
       await _firestore.collection('users').doc(uid).update({
-        'uid': user?.uid,
-        'email': user?.email,
+        'uid': currentUser.uid,
+        'email': currentUser.email,
         'isPaid': false,
         'isBlocked': false,
-        'emailVerified': user?.emailVerified,
+        'emailVerified': currentUser.emailVerified,
         'lastOnline': FieldValue.serverTimestamp(),
       });
       await FirebaseAuth.instance.signOut();
@@ -35,108 +55,146 @@ class ProfileView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Image(image: AssetImage("assets/images/image 3.png")),
+      body: StreamBuilder<DocumentSnapshot>(
+        stream: userDoc,
+        builder: (context, asyncSnapshot) {
+          if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-              Column(
-                spacing: 10,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
+          if (!asyncSnapshot.hasData || !asyncSnapshot.data!.exists) {
+            return const Center(child: Text('User data not found'));
+          }
+
+          final userData = asyncSnapshot.data!.data() as Map<String, dynamic>;
+
+          return SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "Name : Albert Ford",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontFamily: 'Teachers',
-                      fontWeight: FontWeight.w500,
-                      height: 1.40,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    "Email : albertford@gmail.com",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontFamily: 'Teachers',
-                      fontWeight: FontWeight.w500,
-                      height: 1.40,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    "Active Subcribtion : Me, Myself & I Program",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontFamily: 'Teachers',
-                      fontWeight: FontWeight.w500,
-                      height: 1.40,
-                    ),
-                  ),
+                  Image(image: AssetImage("assets/images/image 3.png")),
 
-                  Row(
+                  Column(
+                    spacing: 10,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Expanded(
-                        child: Divider(
-                          color: const Color(0xFF0A3B7C),
-                          thickness: 2,
+                      Text(
+                        "Name: ${userData['name']}",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontFamily: 'Teachers',
+                          fontWeight: FontWeight.w500,
+                          height: 1.40,
                         ),
                       ),
+                      SizedBox(height: 10),
+                      Text(
+                        "Email: ${userData['email']}",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontFamily: 'Teachers',
+                          fontWeight: FontWeight.w500,
+                          height: 1.40,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        "Age: ${userData['isPaid']}",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontFamily: 'Teachers',
+                          fontWeight: FontWeight.w500,
+                          height: 1.40,
+                        ),
+                      ),
+
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Divider(
+                              color: const Color(0xFF0A3B7C),
+                              thickness: 2,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        'For More Information',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: const Color(0xFF0A3B7C),
+                          fontSize: 18,
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        'eMail',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: const Color(0xFF0A3B7C),
+                          fontSize: 18,
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        'Call',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: const Color(0xFF0A3B7C),
+                          fontSize: 18,
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          _signOutUser(context);
+                        },
+                        child: Text(
+                          'Log Out',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: const Color.fromARGB(255, 204, 10, 10),
+                            fontSize: 18,
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      // ElevatedButton(
+                      //   onPressed: () {
+                      //     _signOutUser(context);
+                      //   },
+                      //   child:  Text(
+                      //   'Call',
+                      //   textAlign: TextAlign.center,
+                      //   style: TextStyle(
+                      //     color: const Color(0xFF0A3B7C),
+                      //     fontSize: 18,
+                      //     fontFamily: 'Inter',
+                      //     fontWeight: FontWeight.w500,
+                      //   ),
+                      // ),,
+                      // ),
                     ],
                   ),
-                  Text(
-                    'For More Information',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: const Color(0xFF0A3B7C),
-                      fontSize: 18,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'eMail',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: const Color(0xFF0A3B7C),
-                      fontSize: 18,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Call',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: const Color(0xFF0A3B7C),
-                      fontSize: 18,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
 
-                  ElevatedButton(
-                    onPressed: () {
-                      _signOutUser(context);
-                    },
-                    child: Text("data"),
-                  ),
+                  Image(image: AssetImage("assets/images/image 7.png")),
                 ],
               ),
-
-              Image(image: AssetImage("assets/images/image 7.png")),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }

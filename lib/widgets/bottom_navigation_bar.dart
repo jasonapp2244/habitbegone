@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // For SVG support
 import 'package:habitsbegone/resources/colors/app_colors.dart';
 
-class CustomBottomNavigationBar extends StatelessWidget {
+class CustomBottomNavigationBar extends StatefulWidget {
   final int currentIndex;
   final Function(int) onTap;
 
@@ -12,6 +12,12 @@ class CustomBottomNavigationBar extends StatelessWidget {
     required this.onTap,
   });
 
+  @override
+  State<CustomBottomNavigationBar> createState() =>
+      _CustomBottomNavigationBarState();
+}
+
+class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,22 +33,28 @@ class CustomBottomNavigationBar extends StatelessWidget {
         ],
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _buildNavItem(
-            assetPath: 'assets/icons/home.svg',
-            index: 0,
-            isSelected: currentIndex == 0,
+          Expanded(
+            child: _buildNavItem(
+              assetPath: 'assets/icons/home.svg',
+              index: 0,
+              isSelected: widget.currentIndex == 0,
+            ),
           ),
-          _buildNavItem(
-            assetPath: 'assets/icons/mdi_planner.svg',
-            index: 1,
-            isSelected: currentIndex == 1,
+          Expanded(
+            child: _buildNavItem(
+              assetPath: 'assets/icons/mdi_planner.svg',
+              index: 1,
+              isSelected: widget.currentIndex == 1,
+            ),
           ),
-          _buildNavItem(
-            assetPath: 'assets/icons/profile.svg',
-            index: 2,
-            isSelected: currentIndex == 2,
+          Expanded(
+            child: _buildNavItem(
+              assetPath: 'assets/icons/profile.svg',
+              index: 2,
+              isSelected: widget.currentIndex == 2,
+            ),
           ),
         ],
       ),
@@ -55,8 +67,10 @@ class CustomBottomNavigationBar extends StatelessWidget {
     required bool isSelected,
   }) {
     return GestureDetector(
-      onTap: () => onTap(index),
+      onTap: () => widget.onTap(index),
+
       child: Container(
+        color: AppColors.primaryColor,
         padding: EdgeInsets.all(12),
         child: Column(
           mainAxisSize: MainAxisSize.min,

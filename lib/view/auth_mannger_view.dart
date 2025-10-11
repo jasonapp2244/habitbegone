@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:habitsbegone/resources/colors/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:habitsbegone/resources/routes/routes_name.dart';
+import 'package:habitsbegone/view/auth/sign_up_view.dart';
 
 class AuthManngerView extends StatelessWidget {
   const AuthManngerView({super.key});
@@ -54,10 +55,14 @@ class AuthManngerView extends StatelessWidget {
               ),
               GestureDetector(
                 onTap:
-                    () => Navigator.pushReplacementNamed(
+                    () => Navigator.push(
                       context,
-                      RoutesName.signupview,
+                      MaterialPageRoute(builder: (_) => SignUpView()),
                     ),
+                // Navigator.pushReplacementNamed(
+                //   context,
+                //   RoutesName.signupview,
+                // ),
                 child: Container(
                   width: 120,
                   height: 50,
@@ -81,10 +86,14 @@ class AuthManngerView extends StatelessWidget {
               SizedBox(height: 10),
               GestureDetector(
                 onTap:
-                    () => Navigator.pushReplacementNamed(
+                    () => Navigator.push(
                       context,
-                      RoutesName.loginview,
+                      MaterialPageRoute(builder: (_) => SignUpView()),
                     ),
+                // () => Navigator.pushReplacementNamed(
+                //   context,
+                //   RoutesName.loginview,
+                // ),
                 child: Container(
                   width: 120,
                   height: 50,

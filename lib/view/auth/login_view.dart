@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:habitsbegone/resources/colors/app_colors.dart';
-import 'package:habitsbegone/resources/routes/routes_name.dart';
 import 'package:habitsbegone/utils/responsive.dart';
 import 'package:habitsbegone/utils/utils.dart';
+import 'package:habitsbegone/view/auth/forget_password_view.dart';
 import 'package:habitsbegone/view/home_view.dart';
 import 'package:habitsbegone/view/auth/sign_up_view.dart';
 import 'package:habitsbegone/widgets/auth_button.dart';
@@ -82,13 +81,20 @@ class _LoginViewState extends State<LoginView> {
         }
       }
     } on FirebaseAuthException catch (e) {
-      String message = '';
-      if (e.code == 'user-not-found')
-        message = 'No user found with this email.';
-      if (e.code == 'wrong-password') message = 'Incorrect password.';
+      String error = 'Something went wrong. Please try again.';
+      if (e.code == 'user-not-found') {
+        error = 'Email already in use.';
+      } else if (e.code == 'invalid-email') {
+        error = 'Invalid email format.';
+      } else if (e.code == 'invalid-credential') {
+        error = 'Wrong Email Or Password';
+      } else {
+        error = 'Something went wrong. Please try again.';
+      }
+
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text(message)));
+      ).showSnackBar(SnackBar(content: Text(error)));
     } finally {
       setState(() => _loading = false);
     }
@@ -279,16 +285,23 @@ class _LoginViewState extends State<LoginView> {
                   },
                 ),
                 SizedBox(height: Responsive.h(1.5)),
-                Padding(
-                  padding: EdgeInsets.only(right: Responsive.w(5)),
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      "Forgot Password?",
-                      style: GoogleFonts.dmSans(
-                        color: AppColors.textColorBlack,
-                        fontWeight: FontWeight.bold,
-                        fontSize: Responsive.sp(10),
+                GestureDetector(
+                  onTap:
+                      () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => ForgotPasswordView()),
+                      ),
+                  child: Padding(
+                    padding: EdgeInsets.only(right: Responsive.w(5)),
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        "Forgot Password?",
+                        style: GoogleFonts.dmSans(
+                          color: AppColors.textColorBlack,
+                          fontWeight: FontWeight.bold,
+                          fontSize: Responsive.sp(10),
+                        ),
                       ),
                     ),
                   ),

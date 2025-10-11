@@ -8,8 +8,6 @@ import 'package:habitsbegone/resources/routes/routes_name.dart';
 import 'package:habitsbegone/utils/responsive.dart';
 import 'package:habitsbegone/utils/utils.dart';
 import 'package:habitsbegone/view/auth/login_view.dart';
-import 'package:habitsbegone/view/home_view.dart';
-import 'package:habitsbegone/view/onboarding_flow.dart';
 import 'package:habitsbegone/widgets/auth_button.dart';
 import 'package:habitsbegone/widgets/components/social_bitton.dart';
 import 'package:google_fonts/google_fonts.dart';
