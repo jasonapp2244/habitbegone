@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:habitsbegone/resources/colors/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:habitsbegone/resources/routes/routes_name.dart';
 import 'package:habitsbegone/view/auth/sign_up_view.dart';
 
 class AuthManngerView extends StatelessWidget {

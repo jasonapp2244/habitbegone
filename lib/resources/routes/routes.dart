@@ -111,7 +111,7 @@ class AppRoutes {
     ),
     GetPage(
       name: RoutesName.mytakencousre,
-      page: () => MyTakenCousreView(),
+      page: () => MyTakenCourseView(),
       transitionDuration: const Duration(milliseconds: 500),
       transition: Transition.leftToRight,
     ),

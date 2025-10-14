@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:habitsbegone/resources/colors/app_colors.dart';
-import 'package:habitsbegone/resources/routes/routes_name.dart';
 import 'package:habitsbegone/utils/responsive.dart';
 import 'package:habitsbegone/view/cousre_view.dart';
 import 'package:habitsbegone/view/elec_magnetic_view.dart';
@@ -65,7 +64,7 @@ class _HomeViewState extends State<HomeView> {
       case 0:
         return _buildHomeContent();
       case 1:
-        return MyTakenCousreView();
+        return MyTakenCourseView();
       case 2:
         return ProfileView();
       default:
