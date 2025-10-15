@@ -5,7 +5,7 @@ import 'package:habitsbegone/resources/colors/app_colors.dart';
 import 'package:habitsbegone/utils/responsive.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:habitsbegone/view/video_player.dart';
-import 'package:habitsbegone/widgets/lesson_tile.dart';
+import 'package:open_filex/open_filex.dart'; // for opening PDFs or documents
 
 class MyTakenCourseView extends StatefulWidget {
   const MyTakenCourseView({super.key});
@@ -32,20 +32,14 @@ class _MyTakenCourseViewState extends State<MyTakenCourseView> {
       child: Scaffold(
         backgroundColor: AppColors.primaryColor,
         body: StreamBuilder<DocumentSnapshot>(
-          stream:
-              FirebaseFirestore.instance
-                  .collection('users')
-                  .doc(userId)
-                  .snapshots(),
+          stream: FirebaseFirestore.instance.collection('users').doc(userId).snapshots(),
           builder: (context, userSnap) {
             if (!userSnap.hasData) {
               return const Center(child: CircularProgressIndicator());
             }
 
             final data = userSnap.data!.data() as Map<String, dynamic>?;
-            final purchased = List<String>.from(
-              data?['purchasedCourses'] ?? [],
-            );
+            final purchased = List<String>.from(data?['purchasedCourses'] ?? []);
 
             if (purchased.isEmpty) {
               return const Center(
@@ -53,9 +47,7 @@ class _MyTakenCourseViewState extends State<MyTakenCourseView> {
               );
             }
 
-            // Filter out null or empty course IDs
-            final validCourses =
-                purchased.where((c) => c.trim().isNotEmpty).toList();
+            final validCourses = purchased.where((c) => c.trim().isNotEmpty).toList();
 
             return ListView.builder(
               itemCount: validCourses.length,
@@ -82,13 +74,12 @@ class _MyTakenCourseViewState extends State<MyTakenCourseView> {
       ),
       children: [
         StreamBuilder<QuerySnapshot>(
-          stream:
-              FirebaseFirestore.instance
-                  .collection('courses')
-                  .doc(courseId)
-                  .collection('lessons')
-                  .orderBy('uploadedAt', descending: false)
-                  .snapshots(),
+          stream: FirebaseFirestore.instance
+              .collection('courses')
+              .doc(courseId.toLowerCase().replaceAll(' ', '_'))
+              .collection('lessons')
+              .orderBy('uploadedAt', descending: false)
+              .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Padding(
@@ -107,82 +98,65 @@ class _MyTakenCourseViewState extends State<MyTakenCourseView> {
             final lessons = snapshot.data!.docs;
 
             return Column(
-              children:
-                  lessons.map((doc) {
-                    final data = doc.data() as Map<String, dynamic>;
-                    final title = data['title'] ?? 'Untitled';
-                    final desc = data['description'] ?? '';
-                    final fileUrl = data['fileUrl'] ?? '';
-                    final fileType = data['fileType'] ?? '';
-                    final uploadedAt = data['uploadedAt'];
-                    final date =
-                        uploadedAt is Timestamp ? uploadedAt.toDate() : null;
+              children: lessons.map((doc) {
+                final data = doc.data() as Map<String, dynamic>;
+                final title = data['title'] ?? 'Untitled';
+                final desc = data['description'] ?? '';
+                final files = List<Map<String, dynamic>>.from(data['files'] ?? []);
 
-                    return LessonTile(
-                      title: title,
-                      description: desc,
-                      fileType: fileType,
-                      fileUrl: fileUrl,
-                      onOpen: () {
-                        if (fileType == 'video') {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder:
-                                  (_) => VideoPlayerScreen(videoUrl: fileUrl),
-                            ),
-                          );
-                        } else if (fileType == 'image') {
-                          showDialog(
-                            context: context,
-                            builder:
-                                (_) => Dialog(child: Image.network(fileUrl)),
-                          );
-                        } else if (fileType == 'document') {
-                          // Open PDF viewer (can use flutter_pdfview or open_filex)
-                        }
-                      },
-                    );
-                    // ListTile(
-                    //   title: Text(title),
-                      // subtitle: Column(
-                      //   crossAxisAlignment: CrossAxisAlignment.start,
-                      //   children: [
-                      //     Text(desc),
-                      //     if (date != null)
-                      //       Text(
-                      //         "Uploaded: ${date.toLocal()}",
-                      //         style: const TextStyle(
-                      //           fontSize: 12,
-                      //           color: Colors.grey,
-                      //         ),
-                      //       ),
-                      //   ],
-                      // ),
-                    //   trailing: IconButton(
-                    //     icon: const Icon(Icons.open_in_new),
-                    //     onPressed: () {
-                    //       if (fileType == 'video') {
-                    //         Navigator.push(
-                    //           context,
-                    //           MaterialPageRoute(
-                    //             builder:
-                    //                 (_) => VideoPlayerScreen(videoUrl: fileUrl),
-                    //           ),
-                    //         );
-                    //       } else if (fileType == 'image') {
-                    //         showDialog(
-                    //           context: context,
-                    //           builder:
-                    //               (_) => Dialog(child: Image.network(fileUrl)),
-                    //         );
-                    //       } else if (fileType == 'document') {
-                    //         // TODO: open PDF viewer
-                    //       }
-                    //     },
-                    //   ),
-                    // );
-                  }).toList(),
+                return Card(
+                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 3,
+                  child: ExpansionTile(
+                    title: Text(
+                      title,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(desc),
+                    children: files.map((file) {
+                      final fileUrl = file['fileUrl'] ?? '';
+                      final fileType = file['fileType'] ?? '';
+
+                      return ListTile(
+                        leading: Icon(
+                          fileType == 'video'
+                              ? Icons.videocam
+                              : fileType == 'image'
+                                  ? Icons.image
+                                  : Icons.picture_as_pdf,
+                          color: fileType == 'document'
+                              ? Colors.red
+                              : (fileType == 'video' ? Colors.blue : Colors.green),
+                        ),
+                        title: Text(fileUrl.split('/').last),
+                        onTap: () {
+                          if (fileType == 'video') {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => VideoPlayerScreen(videoUrl: fileUrl),
+                              ),
+                            );
+                          } else if (fileType == 'image') {
+                            showDialog(
+                              context: context,
+                              builder: (_) => Dialog(
+                                child: Image.network(fileUrl),
+                              ),
+                            );
+                          } else if (fileType == 'document') {
+                            // You can open PDF in web or device viewer
+                            OpenFilex.open(fileUrl);
+                          }
+                        },
+                      );
+                    }).toList(),
+                  ),
+                );
+              }).toList(),
             );
           },
         ),
@@ -190,6 +164,205 @@ class _MyTakenCourseViewState extends State<MyTakenCourseView> {
     );
   }
 }
+
+
+
+
+
+
+
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:flutter/material.dart';
+// import 'package:google_fonts/google_fonts.dart';
+// import 'package:habitsbegone/resources/colors/app_colors.dart';
+// import 'package:habitsbegone/utils/responsive.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:habitsbegone/view/video_player.dart';
+// import 'package:habitsbegone/widgets/lesson_tile.dart';
+
+// class MyTakenCourseView extends StatefulWidget {
+//   const MyTakenCourseView({super.key});
+
+//   @override
+//   State<MyTakenCourseView> createState() => _MyTakenCourseViewState();
+// }
+
+// class _MyTakenCourseViewState extends State<MyTakenCourseView> {
+//   String? userId;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     userId = FirebaseAuth.instance.currentUser?.uid;
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     Responsive.init(context);
+//     if (userId == null) return const Center(child: Text("Not logged in"));
+
+//     return SafeArea(
+//       child: Scaffold(
+//         backgroundColor: AppColors.primaryColor,
+//         body: StreamBuilder<DocumentSnapshot>(
+//           stream:
+//               FirebaseFirestore.instance
+//                   .collection('users')
+//                   .doc(userId)
+//                   .snapshots(),
+//           builder: (context, userSnap) {
+//             if (!userSnap.hasData) {
+//               return const Center(child: CircularProgressIndicator());
+//             }
+
+//             final data = userSnap.data!.data() as Map<String, dynamic>?;
+//             final purchased = List<String>.from(
+//               data?['purchasedCourses'] ?? [],
+//             );
+
+//             if (purchased.isEmpty) {
+//               return const Center(
+//                 child: Text("You haven’t purchased any courses yet."),
+//               );
+//             }
+
+//             // Filter out null or empty course IDs
+//             final validCourses =
+//                 purchased.where((c) => c.trim().isNotEmpty).toList();
+
+//             return ListView.builder(
+//               itemCount: validCourses.length,
+//               itemBuilder: (context, index) {
+//                 final courseId = validCourses[index];
+//                 return _buildCourseSection(courseId);
+//               },
+//             );
+//           },
+//         ),
+//       ),
+//     );
+//   }
+
+//   Widget _buildCourseSection(String courseId) {
+//     return ExpansionTile(
+//       title: Text(
+//         courseId.replaceAll('_', ' ').toUpperCase(),
+//         style: GoogleFonts.teachers(
+//           fontSize: Responsive.textScaleFactor * 20,
+//           fontWeight: FontWeight.w700,
+//           color: AppColors.textColorBlack,
+//         ),
+//       ),
+//       children: [
+//         StreamBuilder<QuerySnapshot>(
+//           stream:
+//               FirebaseFirestore.instance
+//                   .collection('courses')
+//                   .doc(courseId.toLowerCase().replaceAll(' ', '_'))
+//                   .collection('lessons')
+//                   .orderBy('uploadedAt', descending: false)
+//                   .snapshots(),
+//           builder: (context, snapshot) {
+//             if (snapshot.connectionState == ConnectionState.waiting) {
+//               return const Padding(
+//                 padding: EdgeInsets.all(16.0),
+//                 child: CircularProgressIndicator(),
+//               );
+//             }
+
+//             if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+//               return const Padding(
+//                 padding: EdgeInsets.all(16.0),
+//                 child: Text("No lessons available yet."),
+//               );
+//             }
+
+//             final lessons = snapshot.data!.docs;
+
+//             return Column(
+//               children:
+//                   lessons.map((doc) {
+//                     final data = doc.data() as Map<String, dynamic>;
+//                     final title = data['title'] ?? 'Untitled';
+//                     final desc = data['description'] ?? '';
+//                     final fileUrl = data['fileUrl'] ?? '';
+//                     final fileType = data['fileType'] ?? '';
+//                     final uploadedAt = data['uploadedAt'];
+//                     final date =
+//                         uploadedAt is Timestamp ? uploadedAt.toDate() : null;
+
+//                     return LessonTile(
+//                       title: title,
+//                       description: desc,
+//                       fileType: fileType,
+//                       fileUrl: fileUrl,
+//                       onOpen: () {
+//                         if (fileType == 'video') {
+//                           Navigator.push(
+//                             context,
+//                             MaterialPageRoute(
+//                               builder:
+//                                   (_) => VideoPlayerScreen(videoUrl: fileUrl),
+//                             ),
+//                           );
+//                         } else if (fileType == 'image') {
+//                           showDialog(
+//                             context: context,
+//                             builder:
+//                                 (_) => Dialog(child: Image.network(fileUrl)),
+//                           );
+//                         } else if (fileType == 'document') {
+//                           // Open PDF viewer (can use flutter_pdfview or open_filex)
+//                         }
+//                       },
+//                     );
+//                     // ListTile(
+//                     //   title: Text(title),
+//                     // subtitle: Column(
+//                     //   crossAxisAlignment: CrossAxisAlignment.start,
+//                     //   children: [
+//                     //     Text(desc),
+//                     //     if (date != null)
+//                     //       Text(
+//                     //         "Uploaded: ${date.toLocal()}",
+//                     //         style: const TextStyle(
+//                     //           fontSize: 12,
+//                     //           color: Colors.grey,
+//                     //         ),
+//                     //       ),
+//                     //   ],
+//                     // ),
+//                     //   trailing: IconButton(
+//                     //     icon: const Icon(Icons.open_in_new),
+//                     //     onPressed: () {
+//                     //       if (fileType == 'video') {
+//                     //         Navigator.push(
+//                     //           context,
+//                     //           MaterialPageRoute(
+//                     //             builder:
+//                     //                 (_) => VideoPlayerScreen(videoUrl: fileUrl),
+//                     //           ),
+//                     //         );
+//                     //       } else if (fileType == 'image') {
+//                     //         showDialog(
+//                     //           context: context,
+//                     //           builder:
+//                     //               (_) => Dialog(child: Image.network(fileUrl)),
+//                     //         );
+//                     //       } else if (fileType == 'document') {
+//                     //         // TODO: open PDF viewer
+//                     //       }
+//                     //     },
+//                     //   ),
+//                     // );
+//                   }).toList(),
+//             );
+//           },
+//         ),
+//       ],
+//     );
+//   }
+// }
 
 
 
