@@ -43,99 +43,138 @@ class _LoginViewState extends State<LoginView> {
 
   bool _loading = false;
 
-  Future<void> _login() async {
-    setState(() => _loading = true);
-    try {
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
-
-      User? user = userCredential.user;
-
-      if (user != null) {
-        if (user.emailVerified) {
-          await _firestore.collection('users').doc(user.uid).update({
-            'uid': user.uid,
-            'email': user.email,
-            'isPaid': false,
-            'isBlocked': false,
-            'emailVerified': user.emailVerified,
-            'lastOnline': FieldValue.serverTimestamp(),
-          });
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const HomeView()),
-          );
-        } else {
-          await user.sendEmailVerification(); // optional re-send
-          await _auth.signOut();
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'Please verify your email before logging in.',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          );
-        }
-      }
-    } on FirebaseAuthException catch (e) {
-      String error = 'Something went wrong. Please try again.';
-      if (e.code == 'user-not-found') {
-        error = 'Email already in use.';
-      } else if (e.code == 'invalid-email') {
-        error = 'Invalid email format.';
-      } else if (e.code == 'invalid-credential') {
-        error = 'Wrong Email Or Password';
-      } else {
-        error = 'Something went wrong. Please try again.';
-      }
-
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(error)));
-    } finally {
-      setState(() => _loading = false);
-    }
-  }
-
   // Future<void> _login() async {
   //   setState(() => _loading = true);
   //   try {
-  //     await _auth.signInWithEmailAndPassword(
+  //     UserCredential userCredential = await _auth.signInWithEmailAndPassword(
   //       email: _emailController.text.trim(),
   //       password: _passwordController.text.trim(),
   //     );
 
-  //     Navigator.pushReplacement(
-  //       context,
-  //       MaterialPageRoute(builder: (_) => HomeView()),
-  //     );
-  //   } on FirebaseAuthException catch (e) {
-  //     String message = '';
-  //     if (e.code == 'user-not-found')
-  //       message = 'No user found with this email.';
-  //     if (e.code == 'wrong-password') message = 'Incorrect password.';
-  //     ScaffoldMessenger.of(
-  //       context,
-  //     ).showSnackBar(SnackBar(content: Text(message)));
-  //   } finally {
-  //     setState(() => _loading = false);
-  //   }
-  //   //   Future<void> _login() async {
-  //   //     setState(() {
-  //   //       _islogin = true;
-  //   //     });
-  //   //     try {
-  //   //       await _auth.signInWithEmailAndPassword(
-  //   //         email: _emailController.text.trim(),
-  //   //         password: _passwordController.text.trim(),
-  //   //       );
-  //   //       Navigator.pushReplacementNamed(context, RoutesName.homeview);
-  //   //     }on FirebaseException catch (e) {
-  //   //  if (e.code == 'user-not-found') message = 'No user found with this email.';    }
+  //     User? user = userCredential.user;
+
+  //     if (user != null) {
+  //       if (user.emailVerified) {
+  //         await _firestore.collection('users').doc(user.uid).update({
+  //           'uid': user.uid,
+  //           'email': user.email,
+  //           'isPaid': false,
+  //           'isActive': false,
+  //           'emailVerified': user.emailVerified,
+  //           'lastOnline': FieldValue.serverTimestamp(),
+  //         });
+  //         Navigator.pushReplacement(
+  //           context,
+  //           MaterialPageRoute(builder: (context) => const HomeView()),
+  //         );
+  //       } else {
+  //         await user.sendEmailVerification(); // optional re-send
+  //         await _auth.signOut();
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //           const SnackBar(
+  //             content: Text(
+  //               'Please verify your email before logging in.',
+  //               style: TextStyle(color: Colors.white),
+  //             ),
+  //           ),
+  //         );
+  //       }
+  //     }
+    // } on FirebaseAuthException catch (e) {
+    //   String error = 'Something went wrong. Please try again.';
+    //   if (e.code == 'user-not-found') {
+    //     error = 'Email already in use.';
+    //   } else if (e.code == 'invalid-email') {
+    //     error = 'Invalid email format.';
+    //   } else if (e.code == 'invalid-credential') {
+    //     error = 'Wrong Email Or Password';
+    //   } else {
+    //     error = 'Something went wrong. Please try again.';
+    //   }
+
+    //   ScaffoldMessenger.of(
+    //     context,
+    //   ).showSnackBar(SnackBar(content: Text(error)));
+    // } finally {
+    //   setState(() => _loading = false);
+    // }
   // }
+
+
+Future<void> _login() async {
+  setState(() => _loading = true);
+  try {
+    UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+      email: _emailController.text.trim(),
+      password: _passwordController.text.trim(),
+    );
+
+    User? user = userCredential.user;
+
+    if (user != null) {
+      // 🔹 Get user data from Firestore
+      DocumentSnapshot userDoc =
+          await _firestore.collection('users').doc(user.uid).get();
+
+      if (!userDoc.exists) {
+        await _auth.signOut();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('User data not found.')),
+        );
+        return;
+      }
+
+      // 🔹 Check if user is active
+      bool isActive = userDoc['isActive'] ?? true;
+
+      if (!isActive) {
+        await _auth.signOut();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Your account has been blocked. Please contact support.'),
+          ),
+        );
+        return;
+      }
+
+      // 🔹 Check if email is verified
+      if (!user.emailVerified) {
+        await user.sendEmailVerification();
+        await _auth.signOut();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please verify your email before logging in.'),
+          ),
+        );
+        return;
+      }
+
+      // 🔹 Update user’s last online time
+      await _firestore.collection('users').doc(user.uid).update({
+        'lastOnline': FieldValue.serverTimestamp(),
+      });
+
+      // 🔹 Proceed to home
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeView()),
+      );
+    }
+  } on FirebaseAuthException catch (e) {
+    String error = 'Something went wrong. Please try again.';
+    if (e.code == 'user-not-found') {
+      error = 'No user found with this email.';
+    } else if (e.code == 'invalid-email') {
+      error = 'Invalid email format.';
+    } else if (e.code == 'invalid-credential' || e.code == 'wrong-password') {
+      error = 'Wrong email or password.';
+    }
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error)));
+  } finally {
+    setState(() => _loading = false);
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -323,15 +362,6 @@ class _LoginViewState extends State<LoginView> {
                       );
                     } else {
                       _login();
-                      // Navigator.pushReplacementNamed(
-                      //   context,
-                      //   RoutesName.homeview,
-                      // );
-
-                      // Navigator.pushReplacement(
-                      //   context,
-                      //   MaterialPageRoute(builder: (_) => HomeView()),
-                      // );
                     }
                   },
                 ),
@@ -398,10 +428,6 @@ class _LoginViewState extends State<LoginView> {
                                         builder: (_) => SignUpView(),
                                       ),
                                     );
-                                    // Navigator.pushReplacementNamed(
-                                    //   context,
-                                    //   RoutesName.signview,
-                                    // );
                                   },
                           ),
                         ],

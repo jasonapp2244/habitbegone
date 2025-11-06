@@ -68,7 +68,7 @@ class _SignUpViewState extends State<SignUpView> {
           'email': user.email,
           'name': _nameController.text.trim(),
           'isPaid': false,
-          'isActive': false,
+          'isActive': true,
           'emailVerified': user.emailVerified,
           'joinedAt': FieldValue.serverTimestamp(),
         });

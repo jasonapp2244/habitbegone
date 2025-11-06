@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:habitsbegone/resources/colors/app_colors.dart';
+import 'package:habitsbegone/view/home_view.dart';
 
 class HypnotherapyView extends StatefulWidget {
   const HypnotherapyView({super.key});
@@ -56,15 +57,19 @@ class _HypnotherapyViewState extends State<HypnotherapyView> {
       });
 
       // 4️⃣ Save metadata to Firestore
-      await FirebaseFirestore.instance.collection('user_uploads').add({
-        'userId': user.uid,
-        'email': user.email,
-        'fileName': fileName,
-        'fileUrl': url,
-        'uploadedAt': FieldValue.serverTimestamp(),
-        'type': result.files.single.extension,
-        'category': 'Hypnotherapy',
-      });
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection('uploads')
+          .add({
+            'userId': user.uid,
+            'email': user.email,
+            'fileName': fileName,
+            'fileUrl': url,
+            'uploadedAt': FieldValue.serverTimestamp(),
+            'type': result.files.single.extension,
+            'category': 'Hypnotherapy',
+          });
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('File uploaded successfully!')),
